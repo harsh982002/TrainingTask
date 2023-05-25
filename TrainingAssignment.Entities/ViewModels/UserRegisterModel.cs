@@ -9,21 +9,21 @@ using TrainingAssignment.Entities.Models;
 
 namespace TrainingAssignment.Entities.ViewModels
 {
-    public class RegisterViewModel
+    public class UserRegisterModel
     {
         [Required(ErrorMessage = "Please enter your First name.")]
-        public string? FirstName { get; set; }
+        public string FirstName { get; set; }
         [Required(AllowEmptyStrings = false,ErrorMessage = "Please enter your Surname.")]
-        public string? SurName { get; set; }
+        public string SurName { get; set; }
 
        
         [Required(ErrorMessage = "Please enter your Phonenumber.")]
         [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$",ErrorMessage = "Entered phone format is not valid.")]
-        public string? PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Please enter your email address.")]
         [EmailAddress(ErrorMessage = "Invalid email address.")]
-        public string? Email { get; set; }
+        public string Email { get; set; }
 
         [Required(ErrorMessage = "Please enter a password.")]
         [DataType(DataType.Password)]
@@ -35,18 +35,19 @@ namespace TrainingAssignment.Entities.ViewModels
         [Compare("Password", ErrorMessage = "The passwords do not match.")]
         public string? ConfirmPassword { get; set; }
 
-        [Required(ErrorMessage ="Country can't be null")]
+        [Required(ErrorMessage ="Please select the country")]
         public byte CountryId { get; set; }
 
-        [Required(ErrorMessage = "State can't be null")]
+        [Required(ErrorMessage = "Please select the state")]
         public byte StateId { get; set; }
 
-        [Required(ErrorMessage = "City can't be null")]
+        [Required(ErrorMessage = "Please select the city")]
         public byte CityId { get; set; }
-        public byte gender { get; set; }
+
+        [Required(ErrorMessage ="Please select gender")]
+        public byte GenderId { get; set; }
         public IFormFile? avatar { get; set; }
         public List<Country>? countries { get; set; }
-        
 
     }
 }

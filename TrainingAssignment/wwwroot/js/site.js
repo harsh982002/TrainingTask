@@ -18,6 +18,8 @@ const getstates = () => {
             }
         })
     }
+    $("#CityId").html(`<option value="">Select City</option >`);
+
 }
 //Get cities as per state
 const getcities = () => {

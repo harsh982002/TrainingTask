@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TrainingAssignment.Entities.ViewModels
 {
-    public class LoginViewModel
+    public class UserLoginModel
     {
         [Required(ErrorMessage = "Please enter your email address.")]
         [EmailAddress(ErrorMessage = "Please enter a valid email address.")]

@@ -10,13 +10,9 @@ namespace TrainingAssignment.Repository.Interface
 {
     public interface IAccountRepository
     {
-        public User Login(LoginViewModel model);
-        public User Registration(RegisterViewModel model);
-        
-        public List<Country> getdetails();
-        public bool IsValidUserEmail(RegisterViewModel model);
-        public List<State> getstates(long country);
-        public List<City> getcity(long states);
-
+        public User Login(UserLoginModel model);
+        public User Registration(UserRegisterModel model);
+        public bool IsValidUserEmail(UserRegisterModel model);
+       
     }
 }

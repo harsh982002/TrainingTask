@@ -14,14 +14,14 @@ namespace TrainingAssignment.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IAccountRepository _accountRepository;
+        private readonly IAllRepository _allRepository;
         private readonly INotyfService _notyf;
         private readonly IConfiguration _configuration;
 
-        public HomeController(ILogger<HomeController> logger, IAccountRepository accountRepository, INotyfService notyf, IConfiguration configuration)
+        public HomeController(ILogger<HomeController> logger, IAllRepository allRepository, INotyfService notyf, IConfiguration configuration)
         {
             _logger = logger;
-            _accountRepository = accountRepository;
+            _allRepository = allRepository;
             _notyf = notyf;
             _configuration = configuration;
         }
@@ -34,7 +34,7 @@ namespace TrainingAssignment.Controllers
             return RedirectToAction("Login");
         }
 
-       [Authorization]
+        [Authorization]
         public IActionResult Index()
         {
             if (User.Identity.IsAuthenticated)
@@ -46,17 +46,19 @@ namespace TrainingAssignment.Controllers
                 return RedirectToAction("Login");
             }
         }
+
         [Authorization]
         public IActionResult Privacy()
         {
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult Login(string? emailId)
         {
             if (!string.IsNullOrEmpty(emailId))
             {
-                LoginViewModel model = new LoginViewModel();
+                UserLoginModel model = new UserLoginModel();
                 model.Email = emailId;
                 return View(model);
             }
@@ -64,24 +66,22 @@ namespace TrainingAssignment.Controllers
             if (token != null)
             {
                 return RedirectToAction("Index");
-
             }
             else
             {
                 return View();
             }
-
-            return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
-        public IActionResult Login(LoginViewModel model)
+        public IActionResult Login(UserLoginModel model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    User user = _accountRepository.Login(model);
+                    User user = _allRepository.accountRepository.Login(model);
                     if (user is null)
                     {
                         return RedirectToAction("Registration", new { emailId = model.Email });
@@ -100,7 +100,7 @@ namespace TrainingAssignment.Controllers
                             var token = JwtHelper.GenerateToken(jwtSettings, user);
                             if (token is not null)
                             {
-                                HttpContext.Response.Cookies.Append("JwtToken", token, new CookieOptions { HttpOnly = true, Secure = true, SameSite = SameSiteMode.None, Expires = DateTime.Now.AddMinutes(1) }); 
+                                HttpContext.Response.Cookies.Append("JwtToken", token, new CookieOptions { HttpOnly = true, Secure = true, SameSite = SameSiteMode.None, Expires = DateTime.Now.AddMinutes(1) });
                                 return RedirectToAction("Index");
                             }
                             else
@@ -118,45 +118,48 @@ namespace TrainingAssignment.Controllers
             }
         }
 
+        [AllowAnonymous]
         public IActionResult Registration(string? emailId)
         {
-            RegisterViewModel model = new RegisterViewModel();
+            UserRegisterModel model = new UserRegisterModel();
             if (!string.IsNullOrEmpty(emailId))
             {
                 model.Email = emailId;
-                model.countries = _accountRepository.getdetails();
+                model.countries = _allRepository.listRepository.GetInitialDetail();
                 return View(model);
             }
-            model.countries = _accountRepository.getdetails();
+            model.countries = _allRepository.listRepository.GetInitialDetail();
             return View(model);
         }
+
         [Route("/Home/getstates")]
         [HttpPost]
-        public JsonResult getstates(long country)
+        public JsonResult GetStates(long country)
         {
-            var deatails = _accountRepository.getstates(country);
-            return Json(deatails);
+            var States = _allRepository.listRepository.GetStates(country);
+            return Json(States);
         }
 
         [Route("/Home/city")]
         [HttpPost]
-        public JsonResult getcity(long states)
+        public JsonResult GetCity(long states)
         {
-            var deatails = _accountRepository.getcity(states);
-            return Json(deatails);
+            var City = _allRepository.listRepository.GetCity(states);
+            return Json(City);
         }
 
+        [AllowAnonymous]
         [Route("/Home/Registration")]
         [HttpPost]
-        public IActionResult Registration(RegisterViewModel model)
+        public IActionResult Registration(UserRegisterModel model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if (_accountRepository.IsValidUserEmail(model))
+                    if (_allRepository.accountRepository.IsValidUserEmail(model))
                     {
-                        User registration = _accountRepository.Registration(model);
+                        User registration = _allRepository.accountRepository.Registration(model);
                         return RedirectToAction("Login");
                     }
                     else

@@ -23,7 +23,7 @@ namespace TrainingAssignment
             }
             else //token found
             {
-                var tokenValidate = JwtHelper.ValidateJwtToken(token); //validate token
+                var tokenValidate = JwtHelper.ValidateJwtToken(token); //for token validation
                 if (tokenValidate == null)//token not valid
                 {
                     context.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
