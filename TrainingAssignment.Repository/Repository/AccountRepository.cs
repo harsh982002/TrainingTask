@@ -13,7 +13,7 @@ namespace TrainingAssignment.Repository.Repository
     public class AccountRepository : IAccountRepository
     {
         private readonly TrainingContext _db;
-        
+
         public AccountRepository(TrainingContext db)
         {
             _db = db;
@@ -30,7 +30,7 @@ namespace TrainingAssignment.Repository.Repository
         public bool IsValidUserEmail(UserRegisterModel model)
         {
             var user = _db.Users.Any(x => x.Email.Equals(model.Email.ToLower()));
-            if (user == null)
+            if (!user)
             {
                 return true;
             }

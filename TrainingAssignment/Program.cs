@@ -3,6 +3,7 @@ using AspNetCoreHero.ToastNotification.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TrainingAssignment;
 using TrainingAssignment.Entities.Data;
 using TrainingAssignment.Repository.Interface;
 using TrainingAssignment.Repository.Repository;
@@ -50,11 +51,12 @@ app.Use(async (context, next) =>
 });
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseRouting();
 
 app.UseAuthentication();
-app.UseAuthorization(); 
+app.UseAuthorization();
 app.UseNotyf();
 app.MapControllerRoute(
     name: "default",

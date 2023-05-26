@@ -1,7 +1,6 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using System.Net;
 using TrainingAssignment.Entities.Models;
 using TrainingAssignment.Entities.ViewModels;
@@ -56,6 +55,7 @@ namespace TrainingAssignment.Controllers
         [AllowAnonymous]
         public IActionResult Login(string? emailId)
         {
+            throw new NotImplementedException();
             if (!string.IsNullOrEmpty(emailId))
             {
                 UserLoginModel model = new UserLoginModel();
@@ -77,6 +77,7 @@ namespace TrainingAssignment.Controllers
         [HttpPost]
         public IActionResult Login(UserLoginModel model)
         {
+
             try
             {
                 if (ModelState.IsValid)
@@ -118,20 +119,6 @@ namespace TrainingAssignment.Controllers
             }
         }
 
-        [AllowAnonymous]
-        public IActionResult Registration(string? emailId)
-        {
-            UserRegisterModel model = new UserRegisterModel();
-            if (!string.IsNullOrEmpty(emailId))
-            {
-                model.Email = emailId;
-                model.countries = _allRepository.listRepository.GetInitialDetail();
-                return View(model);
-            }
-            model.countries = _allRepository.listRepository.GetInitialDetail();
-            return View(model);
-        }
-
         [Route("/Home/getstates")]
         [HttpPost]
         public JsonResult GetStates(long country)
@@ -146,6 +133,20 @@ namespace TrainingAssignment.Controllers
         {
             var City = _allRepository.listRepository.GetCity(states);
             return Json(City);
+        }
+
+        [AllowAnonymous]
+        public IActionResult Registration(string? emailId)
+        {
+            UserRegisterModel model = new UserRegisterModel();
+            if (!string.IsNullOrEmpty(emailId))
+            {
+                model.Email = emailId;
+                model.countries = _allRepository.listRepository.GetInitialDetail();
+                return View(model);
+            }
+            model.countries = _allRepository.listRepository.GetInitialDetail();
+            return View(model);
         }
 
         [AllowAnonymous]
@@ -174,12 +175,6 @@ namespace TrainingAssignment.Controllers
             {
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex.Message);
             }
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
         public IActionResult UnAuthorize()

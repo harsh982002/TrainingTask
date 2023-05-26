@@ -28,6 +28,7 @@ namespace TrainingAssignment.Entities.ViewModels
         [Required(ErrorMessage = "Please enter a password.")]
         [DataType(DataType.Password)]
         [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be strong.")]
+        [RegularExpression(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,100}$", ErrorMessage = "Password must be strong.")]
         public string? Password { get; set; }
 
         [Required(ErrorMessage = "Confrimpassword can't be empty.")]
